@@ -90,15 +90,23 @@ class SiteAnnouncement extends DataObject
 				]
 			);
 
+			$fields->insertBefore(HeaderField::create('TitleHead', 'Title'), 'Title');
+			$fields->insertBefore(HeaderField::create('Scheduling'), 'Starts');
+			$fields->insertBefore(HeaderField::create('MainContent', 'Main content'), 'LinkTo');
+
 			/** Functionality fields, closability etc */
 			$fields->addFieldsToTab(
 				"Root.Functionality",
 				[
+					HeaderField::create('CloseBut','Close button'),
 					CheckboxSetField::create('CanClose', 'Show close button?', ['1' => ' ']),
+					HeaderField::create('StickyMessage','Sticky message'),
 					CheckboxSetField::create('StickyPos', 'Sticky message', ['1' => 'Check this box to pin the message to the page']),
+					HeaderField::create('CTABut','Call to action button'),
 					CheckboxSetField::create('HasCTA', 'Show button', ['1' => 'If checked the message will contain a "Call to action" button']),
 					TextField::create('CTAText', 'Button text')
 						->setDescription('This text will appear inside the message button'),
+					HeaderField::create('MessagePos','Message positioning'),
 					DropdownField::create(
 						'PagePos',
 						'Position',
@@ -113,9 +121,11 @@ class SiteAnnouncement extends DataObject
 			$fields->addFieldsToTab(
 				"Root.Design",
 				[
+					HeaderField::create('MainDes','Main design settings'),
 					ColorField::create('BackgroundColor', 'Background Color'),
 					CheckboxSetField::create('BackgroundTransparency', 'Background transparency', ['1' => 'Add transparency to your message background']),
 					ColorField::create('TextColor', 'Text Color'),
+					HeaderField::create('ButtonDes','Button design settings'),
 					ColorField::create('CTAColor', 'Button color'),
 					ColorField::create('CTATextColor', 'Button text color')
 				]
