@@ -1,5 +1,42 @@
-/* Custom retina logo
+// Custom retina logo
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2), not all, not all, not all, only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx)
 	.icon.icon-16.icon-announcementsadmin
 		background-image: url('../images/icons/pa_icon@2x.png') !important
+
+// Color preview block in CMS
+
+.ss_announcements__color-preview-block
+	display: inline-flex
+	justify-content: center
+	align-items: center
+	width: 100%
+	height: 100%
+	color: #fff
+
+td.col-ColorPreview
+	padding: 0 !important
+	text-align: center
+	width: 15% !important
+
+.main.col-ColorPreview
+	text-align: left
+
+// Font size for infinity symbol
+
+.days--infinite
+	display: flex
+	justify-content: flex-start
+	align-items: center
+	font-size: 3rem
+	font-weight: bold
+	color: lighten(#239534, 10)
+
+// CMS adjustments
+
+#Form_ItemEditForm_StickyPos,
+#Form_ItemEditForm_TakesSpace,
+#Form_ItemEditForm_HasCTA,
+#Form_ItemEditForm_BackgroundTransparency
+	li
+		width: 440px !important
