@@ -4,7 +4,7 @@ class AnnouncementsAdmin extends ModelAdmin
 {
 	private static $menu_title = 'Announcements';
 
-	private static $url_segment = 'pa_system';
+	private static $url_segment = 'pa-system';
 
 	private static $managed_models = ['SiteAnnouncement'];
 

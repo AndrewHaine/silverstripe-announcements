@@ -27,14 +27,15 @@ class SiteAnnouncement extends DataObject
 		'Title' => 'Varchar(130)',
 		'Starts' => 'SS_Datetime',
 		'Expires' => 'SS_Datetime',
-		'LinkTo' => 'Text',
 		'Content' => 'HTMLText',
 		'CanClose' => 'Boolean',
 		'StickyPos' => 'Boolean',
-		'PagePos' => 'Enum("Top Left,Top Full,Top Right,Bottom Left,Bottom Full,Bottom Right,Left Side,Right Side", "Top Full")',
+		'PagePos' => 'Enum("Top Left,Top Full,Top Right,Bottom Left,Bottom Full,Bottom Right", "Top Full")',
 		'TakesSpace' => 'Boolean',
 		'HasCTA' => 'Boolean',
 		'CTAText' => 'Varchar(20)',
+		'CTALink' => 'Text',
+		'LinkInNewTab' => 'Boolean',
 		'BackgroundColor' => 'Color',
 		'BackgroundTransparency' => 'Boolean',
 		'TextColor' => 'Color',
@@ -78,21 +79,27 @@ class SiteAnnouncement extends DataObject
 			/** Implement a simplified version of TinyMCE */
 			HtmlEditorConfig::set_active('silverstripe-announcements');
 
+			/**
+			* Remove fields we have in fieldgroups
+			* because of the way modeladmin creates the fields
+			*/
+			$fields->removeByName([
+				'CTAColor', 'CTATextColor', 'BackgroundColor', 'TextColor']);
+
+
 			$fields->addFieldsToTab(
 				"Root.Main",
 				[
 				TextField::create('Title'),
 				$startTime,
 				$expiryTime,
-				TextField::create('LinkTo', 'Link To')
-					->setDescription('Optional field for linking the message to a url.'),
 				HTMLEditorField::create('Content')
 				]
 			);
 
 			$fields->insertBefore(HeaderField::create('TitleHead', 'Title'), 'Title');
 			$fields->insertBefore(HeaderField::create('Scheduling'), 'Starts');
-			$fields->insertBefore(HeaderField::create('MainContent', 'Main content'), 'LinkTo');
+			$fields->insertBefore(HeaderField::create('MainContent', 'Main content'), 'Content');
 
 			/** Functionality fields, closability etc */
 			$fields->addFieldsToTab(
@@ -104,8 +111,9 @@ class SiteAnnouncement extends DataObject
 					CheckboxSetField::create('StickyPos', 'Sticky message', ['1' => 'Check this box to pin the message to the page']),
 					HeaderField::create('CTABut','Call to action button'),
 					CheckboxSetField::create('HasCTA', 'Show button', ['1' => 'If checked the message will contain a "Call to action" button']),
-					TextField::create('CTAText', 'Button text')
-						->setDescription('This text will appear inside the message button'),
+					TextField::create('CTALink', 'Button Link'),
+					CheckboxField::create('LinkInNewTab', 'Open link in new tab'),
+					TextField::create('CTAText', 'Button text'),
 					HeaderField::create('MessagePos','Message positioning'),
 					DropdownField::create(
 						'PagePos',
@@ -122,16 +130,18 @@ class SiteAnnouncement extends DataObject
 				"Root.Design",
 				[
 					HeaderField::create('MainDes','Main design settings'),
-					ColorField::create('BackgroundColor', 'Background Color'),
+					FieldGroup::create(
+						ColorField::create('BackgroundColor', 'Background Color'),
+						ColorField::create('TextColor', 'Text Color')
+					),
 					CheckboxSetField::create('BackgroundTransparency', 'Background transparency', ['1' => 'Add transparency to your message background']),
-					ColorField::create('TextColor', 'Text Color'),
 					HeaderField::create('ButtonDes','Button design settings'),
-					ColorField::create('CTAColor', 'Button color'),
-					ColorField::create('CTATextColor', 'Button text color')
+					FieldGroup::create(
+						ColorField::create('CTAColor', 'Button color'),
+						ColorField::create('CTATextColor', 'Button text color')
+					)
 				]
 			);
-
-
 		});
 		return parent::getCMSFields();
 	}
@@ -203,5 +213,37 @@ class SiteAnnouncement extends DataObject
 		if($this->TakesSpace == 1) {
 			$this->BackgroundTransparency = 0;
 		}
+
+		/** Only store link if button is enabled */
+		if(!$this->HasCTA) {
+			$this->CTALink = '';
+		}
+
+		/** Ensure linked urls are correctly formatted */
+		$linkTo = $this->CTALink;
+		if($linkTo) {
+			/** Add in url requirements */
+			if(preg_match("/^http:/i", $linkTo) || preg_match("/^https:/i", $linkTo)) {
+				return true;
+			} else if($linkTo[0] == '/') {
+				/** Allow links local to this site - I will probably add a tree dropdown here in the future */
+				return true;
+			} else {
+				/** Return user input if format is correct */
+				$linkToNice = 'http://' . $linkTo;
+			}
+		}
+		$this->CTALink = $linkToNice;
+	}
+
+	/**
+	* Return a css-friendly string of text
+	* @return String
+	*/
+	public function ForCSS($val)
+	{
+		$val = str_replace(' ', '-', $val);
+		$val = strtolower($val);
+		return $val;
 	}
 }
