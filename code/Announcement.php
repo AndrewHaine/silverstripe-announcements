@@ -19,7 +19,7 @@ class SiteAnnouncement extends DataObject
 	private static $field_labels =
 	[
 		'TimeUntilExpiry' => 'Expires in',
-		'ColorPreview' => 'Background Color'
+		'ColorPreview' => 'Color Preview'
 	];
 
 	private static $db =
@@ -153,9 +153,10 @@ class SiteAnnouncement extends DataObject
 	public function ColorPreview()
 	{
 		$bgCol = $this->BackgroundColor;
+		$textCol = $this->TextColor;
 		if($bgCol) {
 			$prevBox = HTMLText::create();
-			$prevBox->setValue("<div class='ss_announcements__color-preview-block' style='background-color:#" . $bgCol  . "'> #" . $bgCol . "</div>");
+			$prevBox->setValue("<div class='ss_announcements__color-preview-block' style='background-color:#" . $bgCol  . "; color: #" . $textCol . "'> #" . $bgCol . "</div>");
 			return $prevBox;
 		} else {
 		 	return "No Color Selected";
@@ -164,7 +165,7 @@ class SiteAnnouncement extends DataObject
 
 	/**
 	* Calculate time until expiry for preview
-	* @return String
+	* @return string
 	*/
 	public function TimeUntilExpiry()
 	{
@@ -194,7 +195,7 @@ class SiteAnnouncement extends DataObject
 	{
 		parent::onBeforeWrite();
 
-		/* Set our default date to now */
+		/* Set our default start date to now */
 		if(!$this->Starts) {
 			$this->Starts = date('d/m/Y');
 		}
@@ -224,12 +225,13 @@ class SiteAnnouncement extends DataObject
 		if($linkTo) {
 			/** Add in url requirements */
 			if(preg_match("/^http:/i", $linkTo) || preg_match("/^https:/i", $linkTo)) {
+				/** return user input if url is corectly formatted */
 				return true;
 			} else if($linkTo[0] == '/') {
 				/** Allow links local to this site - I will probably add a tree dropdown here in the future */
 				return true;
 			} else {
-				/** Return user input if format is correct */
+				/** Add http if required */
 				$linkToNice = 'http://' . $linkTo;
 			}
 		}
@@ -238,12 +240,29 @@ class SiteAnnouncement extends DataObject
 
 	/**
 	* Return a css-friendly string of text
-	* @return String
+	* @param string $val
+	* @return string
 	*/
 	public function ForCSS($val)
 	{
 		$val = str_replace(' ', '-', $val);
 		$val = strtolower($val);
 		return $val;
+	}
+
+	/**
+	* Custom js for pushing page content down
+	*/
+	public function PaddingJS() {
+			Requirements::customScript(<<<JS
+var takesSpace = $this->TakesSpace;
+if(takesSpace == 1) {
+	var messageHeight = document.querySelectorAll('.ss_announcement--top-full')[0].clientHeight;
+	document.body.style.paddingTop = messageHeight + 'px';
+
+	// Height changes etc
+}
+JS
+);
 	}
 }

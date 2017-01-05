@@ -32,4 +32,5 @@ class AnnouncementsControllerExtension extends Extension
 		return $customisedMessages->renderWith("SiteAnnouncements");
 
 	}
+
 }
