@@ -233,9 +233,10 @@ class SiteAnnouncement extends DataObject
 			} else {
 				/** Add http if required */
 				$linkToNice = 'http://' . $linkTo;
+
+				$this->CTALink = $linkToNice;
 			}
 		}
-		$this->CTALink = $linkToNice;
 	}
 
 	/**

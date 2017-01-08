@@ -48,6 +48,56 @@ const pushPage = {
 	}
 }
 
+const announcementCookie = {
+	allSiteAnnouncements: document.querySelectorAll('.ss_announcement__message-outer'),
+	getCookie() {
+		let cookie = document.cookie,
+			cookieArray = cookie.split(';');
+
+		for(let j = 0; j<cookieArray.length; j++) {
+			if(cookieArray[j].includes('ssAnnouncementCookie')) {
+				return cookieArray[j].split('=')[1];
+			}
+		}
+	},
+	setCookie(messageID) {
+		if(document.cookie) {
+			let existingCookieString = announcementCookie.getCookie(),
+				splitExistingCookie = existingCookieString.split(',');
+
+			splitExistingCookie.push(String(messageID));
+
+			let newIDListToString = splitExistingCookie.join(',')
+
+			document.cookie = `ssAnnouncementCookie=${newIDListToString}; path=/`;
+
+		} else {
+			document.cookie = `ssAnnouncementCookie=${String(messageID)}; path=/`;
+		}
+	},
+	removeHiddenClass(message) {
+		message.classList.remove('ss_announcement--hidden');
+	},
+	removeMessageOnInit() {
+		if(document.cookie) {
+			let existingCookieString = announcementCookie.getCookie(),
+				splitExistingCookie = existingCookieString.split(',');
+
+			for(let l = 0; l<splitExistingCookie.length; l++) {
+				let messageToRemove = document.getElementById(splitExistingCookie[l]);
+
+				if(messageToRemove){
+					messageToRemove.parentNode.removeChild(messageToRemove);
+				}
+			}
+		}
+
+		for(let m = 0; m<announcementCookie.allSiteAnnouncements.length; m++) {
+			announcementCookie.allSiteAnnouncements[m].classList.remove('ss_announcement--hidden');
+		}
+	}
+}
+
 const messageAction = {
 	findMessageOuter(element, cls = "ss_announcement__message-outer") {
 
@@ -56,10 +106,12 @@ const messageAction = {
 	    return element;
 
 	},
-	removeMessage(message) {
+	closeMessage(message) {
 
 		// Find the parent of the action button
 		let parentMessage = messageAction.findMessageOuter(message);
+
+		announcementCookie.setCookie(parentMessage.id);
 
 		// Remove message with animation class
 		parentMessage.classList.add('ss_announcement__animating-out');
@@ -76,4 +128,5 @@ const messageAction = {
 	}
 }
 
+announcementCookie.removeMessageOnInit();
 pushPage.init();
