@@ -250,19 +250,4 @@ class SiteAnnouncement extends DataObject
 		return $val;
 	}
 
-	/**
-	* Custom js for pushing page content down
-	*/
-	public function PaddingJS() {
-			Requirements::customScript(<<<JS
-var takesSpace = $this->TakesSpace;
-if(takesSpace == 1) {
-	var messageHeight = document.querySelectorAll('.ss_announcement--top-full')[0].clientHeight;
-	document.body.style.paddingTop = messageHeight + 'px';
-
-	// Height changes etc
-}
-JS
-);
-	}
 }

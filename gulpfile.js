@@ -7,6 +7,7 @@ var gulp = require("gulp"),
 	babel = require('gulp-babel'),
     rename = require("gulp-rename"),
     uglify = require ("gulp-uglify"),
+	saveLicense = require('uglify-save-license'),
     autoPrefix = require("gulp-autoprefixer"),
     minifyCss = require("gulp-clean-css"),
     plumber = require("gulp-plumber"),
@@ -30,7 +31,7 @@ gulp.task("scripts", function() {
   .pipe(babel(
 	  {presets: ['es2015']}
   ))
-  .pipe(uglify())
+  .pipe(uglify({output: {comments: /^!|@preserve|@license|@cc_on/i}}))
   .pipe(gulp.dest('javascript'))
 })
 

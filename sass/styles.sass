@@ -37,14 +37,16 @@ td.col-ColorPreview
 		width: 440px !important
 
 body
-	width: 100%
-	// height: 100000px // For scroll development
+	transition: padding-top .4s cubic-bezier(.18, .93, .34, .95)
 
 .ss_announcement__message-outer
-	padding: 20px 15px
+	padding: 15px 15px 20px
 	border-radius: 7px
-	max-width: 250px
+	max-width: 280px
 	box-shadow: 0 2px 4px rgba(0, 0, 0, .3)
+	z-index: 10000
+	transition: top .4s cubic-bezier(.18, .93, .34, .95)
+	font-family: inherit
 
 .ss_announcement__top
 	display: flex
@@ -70,13 +72,16 @@ body
 
 .ss_announcement--bottom-full,
 .ss_announcement--top-full
-	right: 0
+	left: 0
 	max-width: 10000000px
 	border-radius: 0px
 	width: 100% !important
+	padding-right: 15px
 
-	.ss_announcement__info-holder
-		padding-left: 30px
+	// Weird thing, not sure why this is necessary, hacky but it works
+	.ss_announcement__content-container
+		width: calc(100% - 40px)
+		padding-right: 25px
 
 .ss_announcement--bottom-full
 	bottom: 0px
@@ -87,6 +92,7 @@ body
 // CTA styles
 .ss_announcement__cta-holder
 	width: 100%
+	margin-top: 15px
 	text-align: right
 
 .ss_announcement__cta
@@ -100,9 +106,11 @@ body
 // Text styles
 .ss_announcement__title
 	display: block
+	flex-grow: 1
 	width: 90%
 	margin-bottom: 8px
 	font-size: 1.4rem
+	line-height: 120%
 	font-weight: 800
 
 // Close button
@@ -114,6 +122,7 @@ body
 	margin: 0 0 10px
 	text-align: right
 	transform: translateY(-1px)
+	cursor: pointer
 
 .ss_announcement__cross
 	position: relative
@@ -132,6 +141,21 @@ body
 		border-radius: 2px
 		transform-origin: top left
 	&:before
-		transform: translateX(9px) rotate(45deg)
+		transform: translateX(9px) translateY(3px) rotate(45deg)
 	&:after
-		transform: translateX(6px) translateY(10px) rotate(-45deg)
+		transform: translateX(6px) translateY(13px) rotate(-45deg)
+
+.ss_announcement__content
+	max-width: 1240px
+
+	a
+		color: inherit
+		text-decoration: underline
+
+.ss_announcement__animating-out
+	opacity: 0
+	transition: opacity .5s cubic-bezier(.18, .93, .34, .95)
+
+.ss_announcement__content-container
+	max-width: 1128px
+	margin: 0 auto
