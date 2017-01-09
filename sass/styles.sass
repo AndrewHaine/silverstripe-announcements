@@ -37,8 +37,8 @@ td.col-ColorPreview
 		width: 440px !important
 
 body
-	transition: padding-top .4s cubic-bezier(.18, .93, .34, .95)
-	transition-delay: .2s
+	&.ss_announcements__body--animatable
+		transition: padding-top .4s cubic-bezier(.18, .93, .34, .95)
 
 .ss_announcement__message-outer
 	padding: 15px 15px 20px
@@ -52,10 +52,9 @@ body
 .ss_announcement__top
 	display: flex
 	justify-content: flex-end
-	align-items: flex-start
+	align-items: center
 	padding-right: 10px
 
-	//Change this to retina background image
 
 // Different positions on the page
 .ss_announcement--top-left
@@ -112,6 +111,7 @@ body
 	display: block
 	flex-grow: 1
 	width: 90%
+	margin-right: 16px
 	margin-bottom: 8px
 	font-size: 1.4rem
 	line-height: 120%
@@ -121,7 +121,7 @@ body
 .ss_announcement__cross-holder
 	position: relative
 	display: block
-	height: 25px
+	height: 20px
 	width: 10%
 	margin: 0 0 10px
 	text-align: right
@@ -133,24 +133,20 @@ body
 	display: inline-flex
 	justify-content: center
 	align-items: center
-	width: 25px
-	height: 1.4rem
+	width: 20px
+	height: 20px
+	background-size: 20px
+	background-repeat: no-repeat
+	background-position: center
+	background-image: url('../images/icons/close-icon.png')
 
-	&:before,
-	&:after
-		position: absolute
-		display: block
-		flex-shrink: 0
-		width: 20px
-		height: 4px
-		content: ''
-		background: #fff
-		border-radius: 2px
+@media only screen and (-webkit-min-device-pixel-ratio: 2), not all, not all, not all, only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx)
+	.ss_announcement__cross
+		background-image: url('../images/icons/close-icon@2x.png')
 
-	&:before
-		transform: rotate(45deg)
-	&:after
-		transform: rotate(-45deg)
+@media only screen and (-webkit-min-device-pixel-ratio: 3), not all, not all, not all, only screen and (min-resolution: 192dpi), only screen and (min-resolution: 3dppx)
+	.ss_announcement__cross
+		background-image: url('../images/icons/close-icon@3x.png')
 
 .ss_announcement__content
 	max-width: 1240px

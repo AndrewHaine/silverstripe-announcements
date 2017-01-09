@@ -1,0 +1,20 @@
+{
+	"name": "andrewhaine/silverstripe-announcements",
+	"description": "Interface to allow site administrators create site announcements from the Silverstripe CMS",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "announcement", "announcement", "messages", "banner"],
+	"authors": [
+		{
+			"name": "Andrew Haine",
+			"email": "hello@andrewhaine.co.uk"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/AndrewHaine/silverstripe-announcements/issues"
+	},
+	"require": {
+		"silverstripe/framework": "3.*",
+		"silverstripe/cms": "3.*",
+		"tractorcow/silverstripe-colorpicker": "3.*"
+	}
+}

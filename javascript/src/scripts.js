@@ -17,6 +17,7 @@ const pushPage = {
 			let messageHeight = messages[i].clientHeight;
 			pushPage.pagePunch += parseInt(messageHeight, 10);
 
+			// Shift the previous message down to avoid announcements overlapping at the top of the page
 			if(i > 0) {
 				messages[i-1].style.top = `${messageHeight}px`;
 			}
@@ -37,6 +38,13 @@ const pushPage = {
 	},
 	init() {
 
+		/* Add body class containing padding transition, this should not be added
+			on page load as the animation is jarring
+		*/
+		setTimeout(() => {
+			document.body.classList.add('ss_announcements__body--animatable');
+		}, 400);
+
 		// Update the padding on page load
 		pushPage.updatePadding(pushPage.allMessages);
 
@@ -54,6 +62,7 @@ const announcementCookie = {
 		let cookie = document.cookie,
 			cookieArray = cookie.split(';');
 
+		// Find our cookie from the page cookie
 		for(let j = 0; j<cookieArray.length; j++) {
 			if(cookieArray[j].includes('ssAnnouncementCookie')) {
 				return cookieArray[j].split('=')[1];
@@ -62,36 +71,50 @@ const announcementCookie = {
 	},
 	setCookie(messageID) {
 		if(document.cookie) {
+
+			// Split our ID string
 			let existingCookieString = announcementCookie.getCookie(),
 				splitExistingCookie = existingCookieString.split(',');
 
+			// Add our closed message ID to the cookie string
 			splitExistingCookie.push(String(messageID));
 
+			// Rebuild the cookie
 			let newIDListToString = splitExistingCookie.join(',')
 
 			document.cookie = `ssAnnouncementCookie=${newIDListToString}; path=/`;
 
 		} else {
+
+			// If no cookie exists set a new one to the ID of the closed announcement
 			document.cookie = `ssAnnouncementCookie=${String(messageID)}; path=/`;
 		}
 	},
 	removeHiddenClass(message) {
+
+		// Use a hidden class to prevent prevously closed announement occasionally flickering
 		message.classList.remove('ss_announcement--hidden');
 	},
 	removeMessageOnInit() {
 		if(document.cookie) {
+
+			// Split our ID string
 			let existingCookieString = announcementCookie.getCookie(),
 				splitExistingCookie = existingCookieString.split(',');
 
+			// Loop through IDs retrieved from the cookie
 			for(let l = 0; l<splitExistingCookie.length; l++) {
 				let messageToRemove = document.getElementById(splitExistingCookie[l]);
 
 				if(messageToRemove){
+
+					// Remove announcements if their ID exists in the cookie
 					messageToRemove.parentNode.removeChild(messageToRemove);
 				}
 			}
 		}
 
+		// Remove the hidden class from allowed messages
 		for(let m = 0; m<announcementCookie.allSiteAnnouncements.length; m++) {
 			announcementCookie.allSiteAnnouncements[m].classList.remove('ss_announcement--hidden');
 		}
