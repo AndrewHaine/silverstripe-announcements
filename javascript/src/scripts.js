@@ -15,7 +15,7 @@ const pushPage = {
 		// Loop through our messages and store the total of their heights
 		for(let i = 0; i < messages.length; i++) {
 			let messageHeight = messages[i].clientHeight;
-			pushPage.pagePunch += parseInt(messageHeight, 10);
+			this.pagePunch += parseInt(messageHeight, 10);
 
 			// Shift the previous message down to avoid announcements overlapping at the top of the page
 			if(i > 0) {
@@ -27,10 +27,10 @@ const pushPage = {
 	updatePadding(messages) {
 
 		// Reset padding
-		pushPage.pagePunch = 0;
+		this.pagePunch = 0;
 
 		// Get the total message heights
-		pushPage.getHeights(messages);
+		this.getHeights(messages);
 
 		// Update the DOM
 		document.body.setAttribute('style', `padding-top: ${pushPage.pagePunch}px`);
@@ -46,11 +46,11 @@ const pushPage = {
 		}, 400);
 
 		// Update the padding on page load
-		pushPage.updatePadding(pushPage.allMessages);
+		this.updatePadding(pushPage.allMessages);
 
 		// Update the padding one screen width change
 		window.onresize = () => {
-			pushPage.updatePadding(pushPage.allMessages);
+			this.updatePadding(pushPage.allMessages);
 		}
 
 	}
@@ -73,7 +73,7 @@ const announcementCookie = {
 		if(document.cookie) {
 
 			// Split our ID string
-			let existingCookieString = announcementCookie.getCookie(),
+			let existingCookieString = this.getCookie(),
 				splitExistingCookie = existingCookieString.split(',');
 
 			// Add our closed message ID to the cookie string
@@ -116,7 +116,7 @@ const announcementCookie = {
 
 		// Remove the hidden class from allowed messages
 		for(let m = 0; m<announcementCookie.allSiteAnnouncements.length; m++) {
-			announcementCookie.allSiteAnnouncements[m].classList.remove('ss_announcement--hidden');
+			this.allSiteAnnouncements[m].classList.remove('ss_announcement--hidden');
 		}
 	}
 }

@@ -21,9 +21,10 @@ class AnnouncementsControllerExtension extends Extension
 		$dateNow = date('Y-m-d H:i');
 		$rawMessages = SiteAnnouncement::get()
 			->filter([
-				'Starts:LessThan' => $dateNow,
-				'Expires:GreaterThan' => $dateNow
+				'Starts:LessThan' => $dateNow
 			]);
+
+		$rawMessages = $rawMessages->where("(Expires > '$dateNow') OR DoesNotExpire = 1");
 
 		$customisedMessages = $this->owner->customise([
 			'PAMessages' => $rawMessages

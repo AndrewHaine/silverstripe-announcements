@@ -1,6 +1,6 @@
 {
 	"name": "andrewhaine/silverstripe-announcements",
-	"description": "Interface to allow site administrators create site announcements from the Silverstripe CMS",
+	"description": "Interface to allow site administrators to create site announcements from the Silverstripe CMS",
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "announcement", "announcement", "messages", "banner"],
 	"authors": [

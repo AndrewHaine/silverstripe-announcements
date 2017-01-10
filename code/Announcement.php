@@ -27,6 +27,7 @@ class SiteAnnouncement extends DataObject
 		'Title' => 'Varchar(130)',
 		'Starts' => 'SS_Datetime',
 		'Expires' => 'SS_Datetime',
+		'DoesNotExpire' => 'Boolean',
 		'Content' => 'HTMLText',
 		'CanClose' => 'Boolean',
 		'StickyPos' => 'Boolean',
@@ -46,6 +47,7 @@ class SiteAnnouncement extends DataObject
 	private static $defaults = [
 		'Title' => 'New Site Announcement',
 		'CanClose' => '1',
+		'StickyPos' => '1',
 		'PagePos' => 'Top Full',
 		'TakesSpace' => '1'
 	];
@@ -83,8 +85,14 @@ class SiteAnnouncement extends DataObject
 			* Remove fields we have in fieldgroups
 			* because of the way modeladmin creates the fields
 			*/
-			$fields->removeByName([
-				'CTAColor', 'CTATextColor', 'BackgroundColor', 'TextColor']);
+			$fields->removeByName(
+				[
+				'CTAColor', 'CTATextColor', 'BackgroundColor', 'TextColor'
+				]
+			);
+
+			/** Remove expiry checkbox (this is done behind the scenes) */
+			$fields->removeByName('DoesNotExpire');
 
 
 			$fields->addFieldsToTab(
@@ -199,6 +207,9 @@ class SiteAnnouncement extends DataObject
 		if(!$this->Starts) {
 			$this->Starts = date('d/m/Y');
 		}
+
+		/** If no expiry date is set define the announcement as permanent */
+		$this->Expires ? $this->DoesNotExpire = 0 : $this->DoesNotExpire = 1;
 
 		/** Space taking is only available on the top full position */
 		if($this->PagePos !== 'Top Full') {
