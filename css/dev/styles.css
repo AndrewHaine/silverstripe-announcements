@@ -80,8 +80,33 @@ body.ss_announcements__body--animatable {
   padding-right: 15px; }
   .ss_announcement--bottom-full .ss_announcement__content-container,
   .ss_announcement--top-full .ss_announcement__content-container {
-    width: calc(100% - 40px);
     padding-right: 25px; }
+  @media screen and (min-width: 600px) {
+    .ss_announcement--bottom-full .ss_announcement__content-container,
+    .ss_announcement--top-full .ss_announcement__content-container {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      width: calc(100% - 40px); }
+      .ss_announcement--bottom-full .ss_announcement__content-container .ss_announcement__top,
+      .ss_announcement--top-full .ss_announcement__content-container .ss_announcement__top {
+        width: 100%;
+        -ms-flex-negative: 0;
+            flex-shrink: 0; }
+      .ss_announcement--bottom-full .ss_announcement__content-container .ss_announcement__cta-holder,
+      .ss_announcement--top-full .ss_announcement__content-container .ss_announcement__cta-holder {
+        -ms-flex-negative: 0;
+            flex-shrink: 0;
+        width: 200px;
+        margin-top: 0; }
+      .ss_announcement--bottom-full .ss_announcement__content-container .ss_announcement__info-holder,
+      .ss_announcement--top-full .ss_announcement__content-container .ss_announcement__info-holder {
+        -ms-flex-negative: 0;
+            flex-shrink: 0;
+        width: calc(100% - 250px); } }
 
 .ss_announcement--bottom-full {
   bottom: 0px; }
@@ -92,7 +117,11 @@ body.ss_announcements__body--animatable {
 .ss_announcement__cta-holder {
   width: 100%;
   margin-top: 15px;
-  text-align: right; }
+  text-align: center; }
+
+@media screen and (min-width: 460px) {
+  .ss_announcement__cta-holder {
+    text-align: right; } }
 
 .ss_announcement__cta {
   display: -ms-inline-flexbox;
@@ -103,7 +132,12 @@ body.ss_announcements__body--animatable {
       align-items: center;
   padding: 10px 30px;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); }
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-decoration: none !important; }
+  .ss_announcement__cta * {
+    text-decoration: none !important; }
+  .ss_announcement__cta:visited {
+    text-decoration: none !important; }
 
 .ss_announcement__title {
   display: block;
