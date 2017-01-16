@@ -1,6 +1,6 @@
 <% if $PAMessages %>
 	<% loop $PAMessages %>
-		<div class="ss_announcement--hidden ss_announcement__message-outer ss_announcement--{$ForCSS($PagePos)} ss_announcement__takes-space--{$TakesSpace}" id="ss_announcement--{$ForCSS($Title)}" style="background-color: <% if $BackgroundTransparency %>{$BackgroundColor.CSSColor(0.5)}<% else %>#{$BackgroundColor}<% end_if %>; position:<% if $StickyPos %>fixed<% else %>absolute<% end_if %>;">
+		<div class="ss_announcement--hidden ss_announcement__message-outer ss_announcement-position--{$ForCSS($PagePos)} ss_announcement__takes-space--{$TakesSpace}" id="ss_announcement--{$ForCSS($Title)}" style="background-color: <% if $BackgroundTransparency %>{$BackgroundColor.CSSColor(0.5)}<% else %>#{$BackgroundColor}<% end_if %>; position:<% if $StickyPos %>fixed<% else %>absolute<% end_if %>;">
 			<div class="ss_announcement__content-container">
 
 				<div class="ss_announcement__top">

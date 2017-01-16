@@ -70,7 +70,7 @@ const announcementCookie = {
 		}
 	},
 	setCookie(messageID) {
-		if(document.cookie) {
+		if(this.getCookie()) {
 
 			// Split our ID string
 			let existingCookieString = this.getCookie(),
@@ -96,7 +96,7 @@ const announcementCookie = {
 		message.classList.remove('ss_announcement--hidden');
 	},
 	removeMessageOnInit() {
-		if(document.cookie) {
+		if(announcementCookie.getCookie()) {
 
 			// Split our ID string
 			let existingCookieString = announcementCookie.getCookie(),
@@ -148,8 +148,75 @@ const messageAction = {
 			pushPage.updatePadding(pushPage.allMessages);
 		}, 400);
 
+		messageStacking.updateStacking();
+
+	}
+}
+
+const messageStacking = {
+	allSiteMessages: document.querySelectorAll('.ss_announcement__message-outer'),
+	messagePositions() {
+		let  messageClasses = {
+			topRight: [],
+			topLeft: [],
+			bottomRight: [],
+			bottomLeft: []
+		}
+
+
+		for (let p = 0; p < this.allSiteMessages.length; p++) {
+			let thisMessageClassList = this.allSiteMessages[p].classList;
+			for (let q = 0; q < thisMessageClassList.length; q++) {
+				if (thisMessageClassList[q].includes('ss_announcement-position')) {
+					if(document.getElementById(this.allSiteMessages[p].id) !== null) {
+						let thisMessagePosition=thisMessageClassList[q].split('--')[1];
+						switch(thisMessagePosition) {
+							case 'top-right': messageClasses.topRight.push(this.allSiteMessages[p].id);
+							break;
+							case 'top-left': messageClasses.topLeft.push(this.allSiteMessages[p].id);
+							break;
+							case 'bottom-right': messageClasses.bottomRight.push(this.allSiteMessages[p].id);
+							break;
+							case 'bottom-left': messageClasses.bottomLeft.push(this.allSiteMessages[p].id);
+							break;
+							default: null;
+						}
+					} else return;
+				}
+			}
+		}
+		return messageClasses;
+	},
+	updateStacking() {
+		let messageClassList = this.messagePositions();
+		for(let classPossibility in messageClassList) {
+			if(classPossibility[0] == 't') {
+				for(let r = 0; r < messageClassList[classPossibility].length; r++) {
+					let targetMessageId = messageClassList[classPossibility][r];
+
+
+					let targetMessage = document.getElementById(targetMessageId);
+
+					let previousMessage = document.getElementById(messageClassList[classPossibility][r - 1]);
+
+					if(previousMessage) {
+						let previousMessageHeight = parseInt(previousMessage.clientHeight),
+							previousMessageTop = parseInt(window.getComputedStyle(previousMessage, null).getPropertyValue('top'));
+							// console.log(previousMessageTop);
+						const STANDARD_TOP_MARGIN = parseInt(15);
+
+						let totalToAdd = (previousMessageHeight + previousMessageTop + 24);
+
+						console.log(previousMessageTop);
+
+						targetMessage.style.top = `${totalToAdd}px`;
+					}
+				}
+			}
+		}
 	}
 }
 
 announcementCookie.removeMessageOnInit();
 pushPage.init();
+messageStacking.updateStacking();
